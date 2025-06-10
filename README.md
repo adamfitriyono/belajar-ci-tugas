@@ -89,6 +89,7 @@ Proyek menggunakan struktur MVC CodeIgniter 4:
 - public/img - Gambar produk dan aset
 - public/NiceAdmin - Template admin
 
+## Selamat Mencoba
 
 # CodeIgniter 4 Application Starter
 
