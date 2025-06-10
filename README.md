@@ -1,6 +1,7 @@
 # Toko Online CodeIgniter 4
 
-![Hacktiv8 Code Error](https://media.giphy.com/media/Ll22OhMLAlVDb8UQWe/giphy.gif)
+![Code Error](public/img/giphy.gif)
+
 Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4](https://codeigniter.com/). Sistem ini menyediakan beberapa fungsionalitas untuk toko online, termasuk manajemen produk, keranjang belanja, dan sistem transaksi.
 
 ## Daftar Isi
