@@ -20,29 +20,39 @@
             </a>
         </li><!-- End Keranjang Nav -->
         <?php
-        if (session()->get('role') == 'admin') {
-        ?>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (uri_string() == 'produk') ? "" : "collapsed" ?>" href="produk">
-                    <i class="bi bi-receipt"></i>
-                    <span>Produk</span>
-                </a>
-            </li><!-- End Produk Nav -->
-        <?php
+        if (session()->get('role') == 'admin') 
+        {
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo (uri_string() == 'produk') ? "" : "collapsed" ?>" href="produk">
+                        <i class="bi bi-receipt"></i>
+                        <span>Produk</span>
+                    </a>
+                </li><!-- End Produk Nav -->
+            <?php
         }
         ?>
         <?php
-        if (session()->get('role') == 'admin') {
-        ?>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (uri_string() == 'produkkategori') ? "" : "collapsed" ?>" href="produkkategori">
-                    <i class="bi bi-card-checklist"></i>
-                    <span>Produk Kategori</span>
-                </a>
-            </li><!-- End Produk Kategori Nav -->
-        <?php
+        if (session()->get('role') == 'admin') 
+        {
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo (uri_string() == 'produkkategori') ? "" : "collapsed" ?>" href="produkkategori">
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Produk Kategori</span>
+                    </a>
+                </li><!-- End Produk Kategori Nav -->
+            <?php
         }
         ?>
+
+        <!-- Profile Nav -->
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        </li><!-- End Profile Nav -->
 
         <li class="nav-item">
             <a class="nav-link <?php echo (uri_string() == 'contact') ? "" : "collapsed" ?>" href="contact">
