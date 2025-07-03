@@ -1,7 +1,5 @@
 # Toko Online CodeIgniter 4
 
-![Code Error](public/img/giphy.gif)
-
 Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4](https://codeigniter.com/). Sistem ini menyediakan beberapa fungsionalitas untuk toko online, termasuk manajemen produk, keranjang belanja, dan sistem transaksi.
 
 ## Daftar Isi
@@ -30,6 +28,25 @@ Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4]
 - Sistem Autentikasi
   - Login/Register pengguna
   - Manajemen akun
+- Manajemen Produk
+  - Menambahkan produk baru (CRUD: Create, Read, Update, Delete)
+  - Mengedit produk yang sudah ada
+  - Menghapus produk
+  - Menampilkan daftar produk dengan informasi terkait (nama, harga, jumlah, foto)
+- Manajemen Kategori Produk
+  - Menambahkan kategori produk (CRUD: Create, Read, Update, Delete)
+  - Mengedit kategori produk
+  - Menghapus kategori produk
+  - Menampilkan daftar kategori produk
+- Manajemen Diskon
+  - Menambahkan diskon untuk produk
+  - Mengedit diskon yang telah diterapkan
+  - Menghapus diskon
+  - Validasi untuk menghindari duplikasi diskon berdasarkan tanggal
+- Dashboard Admin
+  - Menampilkan daftar transaksi pembelian yang dilakukan oleh pengguna(guest)
+  - Menampilkan username, alamat, total harga, ongkir, status dan tanggal transaksi
+  - Menampilkan data transaksi secara real-time dengan memperbarui waktu transaksi dan status
 - UI Responsif dengan NiceAdmin template
 
 ## Persyaratan Sistem
@@ -81,16 +98,21 @@ Proyek menggunakan struktur MVC CodeIgniter 4:
   - AuthController.php - Autentikasi pengguna
   - ProdukController.php - Manajemen produk
   - TransaksiController.php - Proses transaksi
+  - ProdukKategoriController.php - Manajemen Kategori
+  - DiskonController.php - Manajemen Diskon
 - app/Models - Model untuk interaksi database
   - ProductModel.php - Model produk
   - UserModel.php - Model pengguna
+  - ProductCategoryModel.php - Model kategori produk
+  - DiskonModel.php - Model diskon
 - app/Views - Template dan komponen UI
   - v_produk.php - Tampilan produk
   - v_keranjang.php - Halaman keranjang
+  - v_diskon.php - Halaman Diskon
+  - v_profile - Halaman Profile
+  - v_contact - Halaman Kontak
 - public/img - Gambar produk dan aset
 - public/NiceAdmin - Template admin
-
-## Selamat Mencoba
 
 # CodeIgniter 4 Application Starter
 
@@ -124,11 +146,11 @@ and any database settings.
 
 ## Important Change with index.php
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
+`index.php` is no longer in the root of the project! It has been moved inside the _public_ folder,
 for better security and separation of components.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
+This means that you should configure your web server to "point" to your project's _public_ folder, and
+not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter _public/..._, as the rest of your logic and the
 framework are exposed.
 
 **Please** read the user guide for a better explanation of how CI4 works!
@@ -150,6 +172,7 @@ PHP version 8.1 or higher is required, with the following extensions installed:
 - [mbstring](http://php.net/manual/en/mbstring.installation.php)
 
 > [!WARNING]
+>
 > - The end of life date for PHP 7.4 was November 28, 2022.
 > - The end of life date for PHP 8.0 was November 26, 2023.
 > - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.

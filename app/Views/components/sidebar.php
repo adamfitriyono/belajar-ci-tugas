@@ -32,6 +32,7 @@
             <?php
         }
         ?>
+
         <?php
         if (session()->get('role') == 'admin') 
         {
@@ -45,6 +46,21 @@
             <?php
         }
         ?>
+
+        <?php 
+        if (session()->get('role') == 'admin')
+        {
+             ?>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo (uri_string() == 'diskon') ? "" : "collapsed" ?>" href="diskon">
+                        <i class="bi bi-tag"></i> 
+                        <span>Diskon</span>
+                    </a>
+                </li>
+            <?php
+        }
+        ?>
+        <!-- End Diskon Nav --> 
 
         <!-- Profile Nav -->
         <li class="nav-item">

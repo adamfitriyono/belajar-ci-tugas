@@ -9,16 +9,25 @@
   <i class="bi bi-list toggle-sidebar-btn"></i>
 </div><!-- End Logo -->
 
-<div class="search-bar">
+<!-- Search bar dan Diskon -->
+
+<div class="search-bar d-flex align-items-center">
   <form class="search-form d-flex align-items-center" method="POST" action="#">
-    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+    <input type="text" name="query" placeholder="Search" title="Enter search keyword" class="form-control">
+    <button type="submit" title="Search" class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
   </form>
+
+<!-- Tampilkan Diskon -->
+  <?php if (session()->get('diskon_nominal')): ?>
+    <span class="badge bg-success ms-3 d-flex align-items-center fw-normal" style="height: 38px; line-height: 38px; padding-left: 15px; padding-right: 15px;">
+      Hari ini ada diskon <?= number_format(session()->get('diskon_nominal'), 0, ',', '.') ?> per item
+    </span>
+  <?php endif; ?>
+
 </div><!-- End Search Bar -->
 
 <nav class="header-nav ms-auto">
   <ul class="d-flex align-items-center">
-
     <li class="nav-item d-block d-lg-none">
       <a class="nav-link nav-icon search-bar-toggle " href="#">
         <i class="bi bi-search"></i>
@@ -173,6 +182,7 @@
         <span class="d-none d-md-block dropdown-toggle ps-2"><?= session()->get('username'); ?> (<?= session()->get('role'); ?>)</span>
       </a><!-- End Profile Iamge Icon -->
 
+      <!-- Profile Dropdown -->
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
         <li class="dropdown-header">
           <h6>Kevin Anderson</h6>

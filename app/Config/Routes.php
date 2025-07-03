@@ -1,21 +1,20 @@
 <?php
 
+use Config\Services;
 use CodeIgniter\Router\RouteCollection;
 
 /**
  * @var RouteCollection $routes
  */
 
+$routes = Services::routes();
+
 $routes->get('/', 'Home::index', ['filter' => 'auth']);
 
 $routes->get('login', 'AuthController::login');
-// $routes->post('login', 'AuthController::login');
 $routes->post('login', 'AuthController::login', ['filter' => 'redirect']);
 $routes->get('logout', 'AuthController::logout');
 
-// Route untuk create atau insert data baru
-// Route untuk ubah data yang sudah ada
-// Route untuk hapus data yang sudah ada.
 
 $routes->group('produk', ['filter' => 'auth'], function ($routes) { 
     $routes->get('', 'ProdukController::index');
@@ -33,6 +32,18 @@ $routes->group('produkkategori', ['filter' => 'auth'], function ($routes) {
 });
 
 
+// Routes Diskon
+$routes->group('diskon', ['filter' => 'role:admin'], function($routes) {
+    $routes->get('/', 'DiskonController::index');
+    $routes->get('create', 'DiskonController::create');
+    $routes->post('store', 'DiskonController::store');
+    $routes->get('edit/(:num)', 'DiskonController::edit/$1');
+    $routes->post('update/(:num)', 'DiskonController::update/$1');
+    $routes->get('delete/(:num)', 'DiskonController::delete/$1');
+});
+
+
+// $routes->get('diskon', 'DiskonController::index', ['filter' => 'auth']);
 
 $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'TransaksiController::index');

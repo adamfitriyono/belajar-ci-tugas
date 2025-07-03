@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use App\Models\ProductModel;  
 
 class TransaksiController extends BaseController
 {
@@ -12,6 +13,7 @@ class TransaksiController extends BaseController
     protected $apiKey;
     protected $transaction;
     protected $transaction_detail;
+    protected $productModel;
 
     function __construct()
     {
@@ -23,6 +25,7 @@ class TransaksiController extends BaseController
         // Menambahkan inisialisasi model
         $this->transaction = new TransactionModel(); 
         $this->transaction_detail = new TransactionDetailModel();
+        $this->productModel = new ProductModel();
     }
 
     public function index()
@@ -34,16 +37,31 @@ class TransaksiController extends BaseController
 
     public function cart_add()
     {
+        $product_id = $this->request->getPost('id');
+        $product = $this->productModel->find($product_id); 
+        $nominal_diskon = session()->get('diskon_nominal');  // Ambil diskon dari session
+
+        // Jika diskon tersedia, kurangi harga produk
+        if ($nominal_diskon) {
+            $product['harga'] = $product['harga'] - $nominal_diskon;  // Mengurangi harga produk dengan diskon
+        }
+
+        // Menambahkan produk ke dalam cart
         $this->cart->insert(array(
-            'id'        => $this->request->getPost('id'),
+            'id'        => $product_id,
             'qty'       => 1,
-            'price'     => $this->request->getPost('harga'),
-            'name'      => $this->request->getPost('nama'),
-            'options'   => array('foto' => $this->request->getPost('foto'))
+            'price'     => $product['harga'],
+            'name'      => $product['nama'],
+            'options'   => array('foto' => $product['foto'])
         ));
+
+        // Gunakan library Cart untuk menambah produk ke dalam cart
+        \Config\Services::cart()->insert($cart_data);
+
         session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url() . 'keranjang">Lihat</a>)');
         return redirect()->to(base_url('/'));
     }
+
 
     public function cart_clear()
     {
@@ -102,11 +120,8 @@ class TransaksiController extends BaseController
 
     public function getCost()
     { 
-            //ID lokasi yang dikirimkan dari halaman checkout
         $destination = $this->request->getGet('destination');
 
-            //parameter daerah asal pengiriman, berat produk, dan kurir dibuat statis
-        //valuenya => 64999 : PEDURUNGAN TENGAH , 1000 gram, dan JNE
         $response = $this->client->request(
             'POST', 
             'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost', [
@@ -153,27 +168,44 @@ class TransaksiController extends BaseController
             ];
 
             $this->transaction->insert($dataForm);
-
             $last_insert_id = $this->transaction->getInsertID();
 
+            $total_diskon = 0;  // Variabel untuk menghitung total diskon
+
             foreach ($this->cart->contents() as $value) {
+                $nominal_diskon = session()->get('diskon_nominal');  // Ambil diskon dari session
+                $harga_after_discount = $value['price'];
+
+                // Mengurangi harga produk dengan diskon
+                if ($nominal_diskon) {
+                    $harga_after_discount = $value['price'] - $nominal_diskon;
+                }
+
                 $dataFormDetail = [
                     'transaction_id' => $last_insert_id,
                     'product_id' => $value['id'],
                     'jumlah' => $value['qty'],
-                    'diskon' => 0,
-                    'subtotal_harga' => $value['qty'] * $value['price'],
+                    'diskon' => $nominal_diskon,  // Menyimpan diskon pada detail transaksi
+                    'subtotal_harga' => $value['qty'] * $harga_after_discount,  // Menggunakan harga setelah diskon
                     'created_at' => date("Y-m-d H:i:s"),
                     'updated_at' => date("Y-m-d H:i:s")
                 ];
 
                 $this->transaction_detail->insert($dataFormDetail);
+
+                // Tambahkan total diskon untuk menghitung harga total
+                $total_diskon += $nominal_diskon * $value['qty'];
             }
 
+            // Update total harga transaksi setelah diskon
+            $total_harga_after_discount = $this->request->getPost('total_harga') - $total_diskon;
+            $this->transaction->update($last_insert_id, ['total_harga' => $total_harga_after_discount]);
+
             $this->cart->destroy();
-    
+
             return redirect()->to(base_url());
         }
     }
+
 
 }

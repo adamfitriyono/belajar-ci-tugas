@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-
 use App\Models\UserModel; 
+use App\Models\DiskonModel; 
 
 class AuthController extends BaseController
 {
@@ -14,7 +14,8 @@ class AuthController extends BaseController
     function __construct()
     {
         helper('form');
-        $this->user= new UserModel();
+        $this->user = new UserModel();
+        $this->diskon = new DiskonModel(); // load model Diskon
     }
 
     public function login()
@@ -29,10 +30,20 @@ class AuthController extends BaseController
                 $username = $this->request->getVar('username');
                 $password = $this->request->getVar('password');
 
-                $dataUser = $this->user->where(['username' => $username])->first(); //pasw 1234567
+                $dataUser = $this->user->where(['username' => $username])->first(); //password yang disimpan
 
                 if ($dataUser) {
                     if (password_verify($password, $dataUser['password'])) {
+                        // pengecekan diskon berdasarkan tanggal login
+                        $currentDate = date('Y-m-d');
+                        $diskon = $this->diskon->where('tanggal', $currentDate)->first();
+
+                        // jika ditemukan diskon simpan nominal diskon di session
+                        if ($diskon) {
+                            session()->set('diskon_nominal', $diskon['nominal']);
+                        }
+
+                        // set session untuk user
                         session()->set([
                             'username' => $dataUser['username'],
                             'role' => $dataUser['role'],
