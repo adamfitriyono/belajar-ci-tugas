@@ -47,15 +47,16 @@ class TransaksiController extends BaseController
         }
 
         // Menambahkan produk ke dalam cart
-        $this->cart->insert(array(
+         $cart_data = array(
             'id'        => $product_id,
             'qty'       => 1,
             'price'     => $product['harga'],
             'name'      => $product['nama'],
             'options'   => array('foto' => $product['foto'])
-        ));
+        );
 
         // Gunakan library Cart untuk menambah produk ke dalam cart
+        $this->cart->insert($cart_data);
         \Config\Services::cart()->insert($cart_data);
 
         session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url() . 'keranjang">Lihat</a>)');
@@ -153,6 +154,7 @@ class TransaksiController extends BaseController
         $body = json_decode($response->getBody(), true); 
         return $this->response->setJSON($body['data']);
     }
+
 
     public function buy()
     {
