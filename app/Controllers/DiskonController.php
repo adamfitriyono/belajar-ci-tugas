@@ -41,6 +41,8 @@ class DiskonController extends BaseController
                 'nominal' => $this->request->getVar('nominal'),
             ]);
 
+            $nominal = $this->request->getVar('nominal'); 
+
             // Update session dengan nominal diskon terbaru
             session()->set('diskon_nominal', $nominal);
 
